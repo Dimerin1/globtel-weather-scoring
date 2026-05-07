@@ -6,7 +6,6 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app import __version__
@@ -27,7 +26,6 @@ def create_app() -> FastAPI:
         redoc_url="/redoc",
     )
 
-    app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
     app.include_router(cities_v1.router, prefix=settings.api_prefix, tags=["cities"])
 
     @app.get("/health", include_in_schema=False)
