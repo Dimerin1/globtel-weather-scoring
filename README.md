@@ -87,12 +87,12 @@ Errors: `400` for an inverted or future range, `502` if Open-Meteo is unhappy.
 
 Hourly readings for the date range are averaged per city, then each variable is mapped onto a 0–10 scale and combined into a weighted total.
 
-| Variable          | Best at | Score formula                         | Weight |
-| ----------------- | ------- | ------------------------------------- | ------ |
-| Temperature (°C)  | 24      | `max(0, 10 − abs(t − 24))`            | 35%    |
-| Wind (km/h)       | 0       | `max(0, 10 − wind / 5)` (0 at 50 km/h) | 20%   |
-| Humidity (%)      | 50      | `max(0, 10 − abs(h − 50) / 5)`        | 20%    |
-| Cloud cover (%)   | 25      | linear up to 25, linear down to 100   | 25%    |
+| Variable          | Best at | Score formula                          | Weight |
+| ----------------- | ------- | -------------------------------------- | ------ |
+| Temperature (°C)  | 24      | `max(0, 10 - abs(t - 24))`             | 35%    |
+| Wind (km/h)       | 0       | `max(0, 10 - wind / 5)` (0 at 50 km/h) | 20%    |
+| Humidity (%)      | 50      | `max(0, 10 - abs(h - 50) / 5)`         | 20%    |
+| Cloud cover (%)   | 25      | linear up to 25, linear down to 100    | 25%    |
 
 The wind anchor is the only piece of judgement: the spec only fixes the upper end (0 km/h = 10 points), so 50 km/h was picked as the lower anchor. That's Beaufort 7, the point where outdoor activity stops being pleasant. See [`app/services/scoring.py`](app/services/scoring.py).
 
