@@ -266,7 +266,8 @@
   }
   .hero .gauge .bar::after { background: var(--gold-deep); }
   .gauge .seg .lbl {
-    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3);
+    font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3);
+    white-space: nowrap;
   }
   .gauge .seg .val {
     font-family: "Fraunces", serif; font-variation-settings: "opsz" 24; font-size: 0.95rem;
@@ -398,27 +399,33 @@
       <div class="val">${value.toFixed(1)}</div>
     </div>`;
 
+  const cityMetrics = (w) => `
+    <dl class="metrics">
+      <div class="metric"><dt>Temp</dt><dd>${w.temperature_c.toFixed(1)}°</dd></div>
+      <div class="metric"><dt>Wind</dt><dd>${w.wind_speed_kmh.toFixed(1)}<span style="font-size:0.7em;color:var(--ink-3);"> km/h</span></dd></div>
+      <div class="metric"><dt>Humidity</dt><dd>${w.relative_humidity_pct.toFixed(0)}%</dd></div>
+      <div class="metric"><dt>Cloud</dt><dd>${w.cloud_cover_pct.toFixed(0)}%</dd></div>
+    </dl>`;
+
+  const gaugeFor = (c) => `
+    <div class="gauge">
+      ${segment('Temp', c.temperature)}
+      ${segment('Wind', c.wind)}
+      ${segment('Humidity', c.humidity)}
+      ${segment('Cloud', c.cloud)}
+    </div>`;
+
   const heroCard = (r) => `
     <article class="hero reveal">
       <div class="rank">${String(r.rank).padStart(2, '0')}</div>
       <div class="city">
         <div class="country">${r.country} · top of the list</div>
         <h2>${r.city}</h2>
-        <dl class="metrics">
-          <div class="metric"><dt>Temp</dt><dd>${r.weather.temperature_c.toFixed(1)}°</dd></div>
-          <div class="metric"><dt>Wind</dt><dd>${r.weather.wind_speed_kmh.toFixed(1)}<span style="font-size:0.7em;color:var(--ink-3);"> km/h</span></dd></div>
-          <div class="metric"><dt>Humidity</dt><dd>${r.weather.relative_humidity_pct.toFixed(0)}%</dd></div>
-          <div class="metric"><dt>Cloud</dt><dd>${r.weather.cloud_cover_pct.toFixed(0)}%</dd></div>
-        </dl>
+        ${cityMetrics(r.weather)}
       </div>
       <div class="score">
         <div class="total">${r.score.toFixed(2)}<span class="out">/10</span></div>
-        <div class="gauge">
-          ${segment('Temp', r.components.temperature, true)}
-          ${segment('Wind', r.components.wind, true)}
-          ${segment('Hum.', r.components.humidity, true)}
-          ${segment('Cloud', r.components.cloud, true)}
-        </div>
+        ${gaugeFor(r.components)}
       </div>
     </article>`;
 
@@ -428,21 +435,11 @@
       <div class="city">
         <div class="country">${r.country}</div>
         <h3>${r.city}</h3>
-        <dl class="metrics">
-          <div class="metric"><dt>T</dt><dd>${r.weather.temperature_c.toFixed(1)}°</dd></div>
-          <div class="metric"><dt>W</dt><dd>${r.weather.wind_speed_kmh.toFixed(1)}</dd></div>
-          <div class="metric"><dt>H</dt><dd>${r.weather.relative_humidity_pct.toFixed(0)}%</dd></div>
-          <div class="metric"><dt>C</dt><dd>${r.weather.cloud_cover_pct.toFixed(0)}%</dd></div>
-        </dl>
+        ${cityMetrics(r.weather)}
       </div>
       <div class="score">
         <div class="total">${r.score.toFixed(2)}<span class="out">/10</span></div>
-        <div class="gauge">
-          ${segment('T', r.components.temperature)}
-          ${segment('W', r.components.wind)}
-          ${segment('H', r.components.humidity)}
-          ${segment('C', r.components.cloud)}
-        </div>
+        ${gaugeFor(r.components)}
       </div>
     </article>`;
 
